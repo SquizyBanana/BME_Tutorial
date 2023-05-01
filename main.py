@@ -1,17 +1,22 @@
-# This is a sample Python script.
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy
+name = "main"
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def main()
+    var_names = ['acc_x', 'acc_y', 'acc_z', 'gyr_x', 'gyr_y', 'gyr_z'] # Initiate variable names
+    df = pd.read_csv(r'data_q1.csv', names=var_names) # Load the data
+    time = numpy.linspace(0,1024/60, num = 1025)
+    print(time)
+    #df = pd.DataFrame.insert(6, 'time', time)
+    print(df)
+    df = df.cumsum()
+    df.to_numpy()
 
+    #df.plot(x= time ,y=df.acc_x, kind='line')
+    fig, ax = plt.subplots()
+    ax.plot(time, df)
+    fig.show()
 
-def print_hi(name):
-    import pandas as pd
-    var_names = ['acc_x', 'acc_y', 'acc_z', 'gyr_x', 'gyr_y', 'gyr_z']
-    df = pd.read_csv(r'data\data_q1.csv', names=var_names)  # Load the data
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+while name == "main"
+    main()
