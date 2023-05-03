@@ -7,7 +7,7 @@ var_names = ['acc_x', 'acc_y', 'acc_z', 'gyr_x', 'gyr_y', 'gyr_z'] # Initiate va
 df = pd.read_csv(r'data_q2.csv', names=var_names) # Load the data
 time = numpy.linspace(0,300/60, num = 301)
 
-x_vel = numpy.cumsum((df['acc_x']*0.86)/60)
+x_vel = numpy.cumsum(((df['acc_x'])/4)/60)
 y_vel = numpy.cumsum(df['acc_y']/60)
 z_vel = numpy.cumsum(df['acc_z']/60)
 
