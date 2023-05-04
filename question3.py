@@ -16,8 +16,8 @@ time = numpy.linspace(0,30720/fs, num = 30721)
 
 
 fig, ax = plt.subplots()
-ax.plot(time, df_head, label=var_names)
-ax.plot(time, df_tibia, label=var_names)
+#ax.plot(time, df_head, label=var_names)
+#ax.plot(time, df_tibia, label=var_names)
 
 #find peaks
 peaks_l = signal.find_peaks(df_tibia['norm'],1, distance=300)
@@ -42,6 +42,27 @@ for h in range(len(peak_h_values)):
 norms_t = peaks_l_corrected
 norms_h = peaks_h_corrected
 print(numpy.mean(numpy.array(norms_t) - numpy.array(norms_h)))
+
+#rotation estimation
+y_rot_acc = numpy.arctan(df_tibia['acc_x']/pow(pow(df_tibia['acc_z'],2) + pow(df_tibia['acc_y'],2), 1/2))*57.35
+y_rot_gyr = numpy.cumsum(df_tibia['gyr_y']/60)*57.35
+
+xa_fs = 60  # Sampling frequency of the sensor
+xa_fc = 5  # Cut-off frequency of the filter
+xa_w = (2 * xa_fc / xa_fs)  # Normalize the frequency
+xa_b, xa_a = signal.butter(2, xa_w, 'low')  # Create filter parameters
+y_rot_acc_filtered = signal.lfilter(xa_b, xa_a, y_rot_acc)
+
+xg_fs = 60  # Sampling frequency of the sensor
+xg_fc = 0.2  # Cut-off frequency of the filter
+xg_w = (2 * xg_fc / xg_fs)  # Normalize the frequency
+xg_b, xg_a = signal.butter(2, xg_w, 'high')  # Create filter parameters
+y_rot_gyr_filtered = signal.lfilter(xg_b, xg_a, y_rot_gyr)
+
+
+ax.plot(time, y_rot_acc, label= 'accelerometer')
+ax.plot(time, y_rot_gyr_filtered, label= 'gyroscope')
+ax.plot(time,(y_rot_acc_filtered+ y_rot_gyr_filtered), label='comp')
 
 ax.legend()
 plt.show()

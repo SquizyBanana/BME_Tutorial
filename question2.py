@@ -5,9 +5,19 @@ import scipy.signal as signal
 
 var_names = ['acc_x', 'acc_y', 'acc_z', 'gyr_x', 'gyr_y', 'gyr_z'] # Initiate variable names
 df = pd.read_csv(r'data_q2.csv', names=var_names) # Load the data
+
 time = numpy.linspace(0,300/60, num = 301)
 
-x_vel = numpy.cumsum(((df['acc_x'])/4)/60)
+x_acc = df['acc_x'].to_numpy()
+stationary = 0
+for i in range(60):
+    stationary += x_acc[i]
+stationary = stationary/60
+print(stationary)
+
+
+
+x_vel = numpy.cumsum(((df['acc_x']-stationary)/4)/60)
 y_vel = numpy.cumsum(df['acc_y']/60)
 z_vel = numpy.cumsum(df['acc_z']/60)
 
@@ -16,11 +26,11 @@ y_pos = numpy.cumsum(y_vel)
 z_pos = numpy.cumsum(z_vel)
 
 fig, ax = plt.subplots()
-ax.plot(time,x_pos, label = "x")
-ax.plot(time,y_pos, label = "y")
+#ax.plot(time,x_pos, label = "x")
+#ax.plot(time,y_pos, label = "y")
 #ax.plot(time,z_pos, label = "z")
 ax.plot(time,x_vel, label = "v x")
-ax.plot(time,y_vel, label = "v y")
+#ax.plot(time,y_vel, label = "v y")
 #ax.plot(time,z_vel, label = "v z")
 
 
